@@ -1,6 +1,5 @@
 var express = require('express');
 var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
 
 var mdAutenticacion = require('../middlewares/autentificacion');
 
@@ -11,23 +10,32 @@ var Usuario = require('../models/usuario');
 // ==============================
 //  Obtener todos los usuarios
 // ==============================
-app.get('/', (request, response, next) => {
+app.get('/', (req, res, next) => {
+
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
 
     // Esta es una manera de devolver los parámetros que queramos y no todos.
     Usuario.find({}, 'nombre email img role')
+        .skip(desde)
+        .limit(5)
         .exec(
             (error, usuarios) => {
                 if (error) {
-                    return response.status(500).json({
+                    return res.status(500).json({
                         ok: false,
                         mensaje: 'Error cargando usuarios',
                         errors: error
                     })
                 }
-                response.status(200).json({
-                    ok: true,
-                    usuarios: usuarios,
-                    usuarioToken: req.usuario
+
+                Usuario.count({}, (error, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        usuarios: usuarios,
+                        usuarioToken: req.usuario,
+                        total: conteo
+                    })
                 });
             });
 });
