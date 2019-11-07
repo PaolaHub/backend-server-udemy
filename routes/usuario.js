@@ -98,7 +98,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (request, response, next) => {
 //  Crear un nuevo usuario
 // ==============================
 
-app.post('/', mdAutenticacion.verificaToken, (req, response) => {
+app.post('/', (req, response) => {
 
     var body = req.body;
 
@@ -135,14 +135,14 @@ app.post('/', mdAutenticacion.verificaToken, (req, response) => {
 
 // OJO! el nombre que definamos en la ruta es el mismo que tenemos que usar
 // cuando llamamos a los params.
-app.delete('/:este_id', mdAutenticacion.verificaToken, (request, response, next) => {
+app.delete('/:este_id', mdAutenticacion.verificaToken, (req, res, next) => {
 
-    var id = request.params.este_id;
+    var id = req.params.este_id;
 
     Usuario.findByIdAndDelete(id, (error, usuarioBorrado) => {
 
         if (error) {
-            return response.status(500).json({
+            return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al borrar usuario',
                 errors: error
@@ -150,16 +150,14 @@ app.delete('/:este_id', mdAutenticacion.verificaToken, (request, response, next)
         }
 
         if (!usuarioBorrado) {
-            return response.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 mensaje: 'No existe un usuario con ese id',
                 errors: { message: 'No existe un usuario con ese id' }
             });
         }
 
-
-
-        response.status(200).json({
+        res.status(200).json({
             ok: true,
             usuario: usuarioBorrado,
             usuarioToken: req.usuario

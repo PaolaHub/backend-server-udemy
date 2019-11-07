@@ -111,7 +111,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
             // Validamos que existe el archivo y lo borramos
             if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
+                fs.unlinkSync(pathViejo);
             }
 
             usuario.img = nombreArchivo;
