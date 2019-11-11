@@ -16,7 +16,7 @@ app.get('/', (req, res, next) => {
     desde = Number(desde);
 
     // Esta es una manera de devolver los parámetros que queramos y no todos.
-    Usuario.find({}, 'nombre email img role')
+    Usuario.find({}, 'nombre email img role google')
         .skip(desde)
         .limit(5)
         .exec(

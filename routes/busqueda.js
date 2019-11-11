@@ -38,7 +38,7 @@ app.get('/coleccion/:tabla/:busqueda', (req, res, next) => {
     }
 
     promesa.then(data => {
-        res.status(400).json({
+        res.status(200).json({
             ok: true,
             // ECMAScript 6. Propiedades de objetos computadas o procesadas.
             // Le estamos diciendo a JavaScript que no requeremos la palabra tabla si no lo 
