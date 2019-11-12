@@ -162,7 +162,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
             // Validamos que existe el archivo y lo borramos
             if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
+                fs.unlinkSync(pathViejo);
             }
 
             medico.img = nombreArchivo;
@@ -209,7 +209,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
             // Validamos que existe el archivo y lo borramos
             if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
+                fs.unlinkSync(pathViejo);
             }
 
             hospital.img = nombreArchivo;

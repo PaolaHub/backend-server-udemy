@@ -30,11 +30,42 @@ app.get('/', (req, res, next) => {
                 res.status(200).json({
                     ok: true,
                     medicos: medicos,
-                    total: conteo
+                    totalMedicos: conteo
                 });
             });
         });
 
+});
+
+// Obtener un médico a través de su ID
+app.get('/:id', (req, res, next) => {
+
+    var id = req.params.id;
+
+    Medico.findById(id)
+        .populate('usuario', 'nombre email img')
+        .populate('hospital')
+        .exec((error, medico) => {
+            if (error) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al crear un medico',
+                    errors: error
+                });
+            }
+            if (!medico) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'No existe un medico con el id' + id + 'no existe',
+                    errors: { message: 'No existe un medico con ese ID' }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                medico: medico
+            });
+        });
 });
 
 // PETICION POST
