@@ -45,7 +45,9 @@ app.get('/', (req, res, next) => {
 //  Actualizar un nuevo usuario
 // ==============================
 
-app.put('/:id', mdAutenticacion.verificaToken, (request, response, next) => {
+app.put('/:id', [mdAutenticacion.verificaToken,
+    mdAutenticacion.verificaADMIN_ROLE_o_MismoUsuario
+], (request, response, next) => {
 
     var id = request.params.id;
     var body = request.body;
@@ -135,7 +137,7 @@ app.post('/', (req, response) => {
 
 // OJO! el nombre que definamos en la ruta es el mismo que tenemos que usar
 // cuando llamamos a los params.
-app.delete('/:este_id', mdAutenticacion.verificaToken, (req, res, next) => {
+app.delete('/:este_id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_ROLE], (req, res, next) => {
 
     var id = req.params.este_id;
 
