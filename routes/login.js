@@ -12,6 +12,25 @@ var Usuario = require('../models/usuario');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(CLIENT_ID);
 
+var mdAutenticacion = require('../middlewares/autentificacion');
+
+// =================================
+// Renueva el token
+// =================================
+app.get('/renuevatoken', mdAutenticacion.verificaToken, (req, res) => {
+
+    var token = jwt.sign({ usuario: req.usuario }, SEED, { expiresIn: 14400 }); // 4 horas
+
+    res.status(200).json({
+        ok: true,
+        token: token
+    });
+});
+
+// =================================
+// Autenticación de Google
+// =================================
+
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
@@ -30,10 +49,6 @@ async function verify(token) {
         google: true
     }
 }
-
-// =================================
-// Autenticación de Google
-// =================================
 
 // Google recomienda que las peticiones se hagan por POST
 
@@ -160,7 +175,7 @@ app.post('/', (request, response, next) => {
         // 2. SEED. Algo que nos ayude a hacer unico a nuestro token.
         // 3. Fecha de expiración en segundos. 4 horas
         usuarioDB.password = ':)';
-        var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 })
+        var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 });
 
         response.status(200).json({
             ok: true,
